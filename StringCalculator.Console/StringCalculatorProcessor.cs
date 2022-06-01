@@ -26,8 +26,20 @@
                 delimeters.Add(Convert.ToChar(newDelimeter));
             }
 
-            var result = numberString.Split(delimeters.ToArray())
-                .Select(n => int.Parse(n))
+            var numberList = numberString.Split(delimeters.ToArray())
+                .Select(n => int.Parse(n));
+
+            var negatives = numberList.Where(n => n < 0);
+
+            if (negatives.Any())
+            {
+                string negativeString = string.Join(',', negatives
+                    .Select(n => n.ToString()));
+                throw new Exception($"Negatives not allowed: {negativeString}");
+            }
+
+            var result = numberList
+                .Where(n => n <= 1000)
                 .Sum();
 
             return result;

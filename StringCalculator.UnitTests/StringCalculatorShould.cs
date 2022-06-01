@@ -5,6 +5,7 @@ namespace StringCalculator.UnitTests
     public class StringCalculatorShould
     {
 
+
         [Theory]
         [InlineData(0, "")]
         [InlineData(0, "0")]
@@ -47,6 +48,31 @@ namespace StringCalculator.UnitTests
         [InlineData(6, "//;\n1;2;3")]
 
         public void ReturnsSumGivenStringWithCustomDelimeter(int expectedResult, string numbers)
+        {
+            var stringCalculator = new StringCalculatorProcessor();
+            var actual = stringCalculator.Add(numbers);
+
+            Assert.Equal(expectedResult, actual);
+        }
+
+        [Theory]
+        [InlineData("Negatives not allowed: -1", "-1,2")]
+        [InlineData("Negatives not allowed: -1,-2", "-1,-2")]
+        public void ThrowsGivenNegativeInput(string expectedResult, string numbers)
+        {
+            var stringCalculator = new StringCalculatorProcessor();
+            Action action = () => stringCalculator.Add(numbers);
+
+            var ex = Assert.Throws<Exception>(action);
+
+            Assert.Equal(expectedResult, ex.Message);
+        }
+
+        [Theory]
+        [InlineData("1,2,3000", 3)]
+        [InlineData("1001,2", 2)]
+        [InlineData("1000,2", 1002)]
+        public void ReturnsSumGivenStringIgnoringValuesOver1000(string numbers, int expectedResult)
         {
             var stringCalculator = new StringCalculatorProcessor();
             var actual = stringCalculator.Add(numbers);
