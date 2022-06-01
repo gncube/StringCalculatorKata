@@ -11,15 +11,26 @@
             if (string.IsNullOrWhiteSpace(numbers))
                 return 0;
 
-            List<string> ints = numbers.Split(',').ToList<string>();
+            var delimeters = new List<char> { ',', '\n' };
 
-            var sum = 0;
+            string numberString = numbers;
 
-            foreach (var i in ints)
+            if (numberString.StartsWith("//"))
             {
-                sum = sum + Convert.ToInt32(i);
+                var splitInput = numberString.Split('\n');
+
+                var newDelimeter = splitInput.First().Trim('/');
+
+                numberString = string.Join('\n', splitInput.Skip(1));
+
+                delimeters.Add(Convert.ToChar(newDelimeter));
             }
-            return sum;
+
+            var result = numberString.Split(delimeters.ToArray())
+                .Select(n => int.Parse(n))
+                .Sum();
+
+            return result;
         }
     }
 }
