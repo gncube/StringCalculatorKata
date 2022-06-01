@@ -4,15 +4,19 @@ namespace StringCalculator.UnitTests
 {
     public class StringCalculatorShould
     {
-        [Fact]
-        public void ReturnAnInteger()
+
+        [Theory]
+        [InlineData(0, "")]
+        [InlineData(0, "0")]
+        [InlineData(1, "0,1")]
+        [InlineData(3, "0,1,2")]
+        [InlineData(83, "0,1,2,3,4,5,6,7,12,43")]
+        public void ReturnTheCorrectInteger(int expectedResult, string numbers)
         {
             var stringCalculator = new StringCalculatorProcessor();
+            var actual = stringCalculator.Add(numbers);
 
-            var result = stringCalculator.Add("numbers");
-            var expectedResult = 1;
-
-            Assert.Equal(expectedResult, result);
+            Assert.Equal(expectedResult, actual);
         }
     }
 }
